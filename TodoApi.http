@@ -1,0 +1,32 @@
+@TodoApi_HostAddress = http://localhost:5127
+
+GET {{TodoApi_HostAddress}}/GetTasks
+Accept: application/json
+
+###
+GET {{TodoApi_HostAddress}}/GetTaskById/3
+Accept: application/json
+
+###
+GET {{TodoApi_HostAddress}}/
+Accept: application/json
+###
+Post {{TodoApi_HostAddress}}/CreateTasks
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id" : 3,
+    "title" : "Third",
+    "Status" : 1
+}
+###
+Put {{TodoApi_HostAddress}}/UpdateTask/3
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id" : 3,
+    "title" : "Fourth",
+    "Status" : 3
+}
