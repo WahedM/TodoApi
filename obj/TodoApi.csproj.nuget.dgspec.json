@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\USER\\Projects\\Asp.net\\TodoApi\\TodoApi\\TodoApi.csproj": {}
+    "C:\\Users\\USER\\Projects\\Asp.net\\TodoApi\\TodoApi\\TodoApi.csproj": {}
   },
   "projects": {
-    "c:\\Users\\USER\\Projects\\Asp.net\\TodoApi\\TodoApi\\TodoApi.csproj": {
+    "C:\\Users\\USER\\Projects\\Asp.net\\TodoApi\\TodoApi\\TodoApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\USER\\Projects\\Asp.net\\TodoApi\\TodoApi\\TodoApi.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Projects\\Asp.net\\TodoApi\\TodoApi\\TodoApi.csproj",
         "projectName": "TodoApi",
-        "projectPath": "c:\\Users\\USER\\Projects\\Asp.net\\TodoApi\\TodoApi\\TodoApi.csproj",
+        "projectPath": "C:\\Users\\USER\\Projects\\Asp.net\\TodoApi\\TodoApi\\TodoApi.csproj",
         "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\USER\\Projects\\Asp.net\\TodoApi\\TodoApi\\obj\\",
+        "outputPath": "C:\\Users\\USER\\Projects\\Asp.net\\TodoApi\\TodoApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
