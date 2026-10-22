@@ -9,6 +9,7 @@
       "TodoApi/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.OpenApi": "9.0.19",
+          "Microsoft.EntityFrameworkCore": "9.0.3",
           "Microsoft.EntityFrameworkCore.InMemory": "9.0.3"
         },
         "runtime": {

@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(option => option.UseInMemoryDatabase("TodoDatabase"));
 var app = builder.Build();
 
@@ -17,24 +18,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
 
 app.MapGet("/", () => "Hello World");
 
@@ -60,6 +43,8 @@ app.MapPost("/CreateTasks", (Task task, AppDbContext db) =>
 app.MapPut("/UpdateTask/{id}",(AppDbContext db, int id, Task newTask) =>
 {
     var task = db.Tasks.Find(id);
+    if(task is null)
+        return Results.NotFound();
     task.Id = newTask.Id;
     task.Title = newTask.Title;
     task.Status = newTask.Status;
@@ -70,13 +55,13 @@ app.MapPut("/UpdateTask/{id}",(AppDbContext db, int id, Task newTask) =>
 app.MapDelete("/deleteTask/{id}",(int id, AppDbContext db) =>
 {
     var task = db.Tasks.Find(id);   
+    if(task is null)
+        return Results.NotFound();
     db.Tasks.Remove(task);
     db.SaveChanges();
     return Results.NoContent();
 });
+app.MapControllers();
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+

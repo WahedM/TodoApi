@@ -41,3 +41,4 @@ c:\Users\USER\Projects\Asp.net\TodoApi\TodoApi\bin\Debug\net9.0\Microsoft.Extens
 c:\Users\USER\Projects\Asp.net\TodoApi\TodoApi\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
 c:\Users\USER\Projects\Asp.net\TodoApi\TodoApi\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
 c:\Users\USER\Projects\Asp.net\TodoApi\TodoApi\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
+c:\Users\USER\Projects\Asp.net\TodoApi\TodoApi\obj\Debug\net9.0\TodoApi.sourcelink.json

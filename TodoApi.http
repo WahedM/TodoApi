@@ -1,4 +1,4 @@
-@TodoApi_HostAddress = http://localhost:5127
+@TodoApi_HostAddress = http://localhost:5107
 
 GET {{TodoApi_HostAddress}}/GetTasks
 Accept: application/json
@@ -11,13 +11,13 @@ Accept: application/json
 GET {{TodoApi_HostAddress}}/
 Accept: application/json
 ###
-Post {{TodoApi_HostAddress}}/CreateTasks
+POST {{TodoApi_HostAddress}}/api/Task
 Accept: application/json
 Content-Type: application/json
 
 {
-    "id" : 3,
-    "title" : "Third",
+    "id" : 1,
+    "title" : "First",
     "Status" : 1
 }
 ###
@@ -30,3 +30,11 @@ Content-Type: application/json
     "title" : "Fourth",
     "Status" : 3
 }
+
+###
+DELETE {{TodoApi_HostAddress}}/DeleteTask/1
+Accept: application/json
+
+###
+GET {{TodoApi_HostAddress}}/api/Task
+Accept: application/json
