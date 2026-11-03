@@ -2,6 +2,10 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TodoApi.Models;
+using TodoApi.DTOs;
+using MapsterMapper;
+using TodoApi.Repository;
 namespace TodoApi.Controllers
 {
         
@@ -9,55 +13,72 @@ namespace TodoApi.Controllers
     [ApiController]
     public class TaskController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public TaskController(AppDbContext context)
+
+        private readonly ITaskRepository repository;
+        private readonly IMapper mapper;
+
+        public TaskController(ITaskRepository repository, IMapper mapper)
         {
-            _context = context;
+            this.repository = repository;
+            this.mapper = mapper;
         }
 
-        [HttpGet]
-        public ActionResult GetTasks()
+        [HttpGet(Name = "GetAllTasks")]
+        public async Task<ActionResult<List<TaskItem>>> GetallTasks()
         {
-            var res = _context.Tasks.ToList();    
+            var res = await repository.GetAllTasksAsync();
 
             return Ok(res);
         }
         [HttpGet("{id}", Name = "GetTaskById")]
-        public ActionResult GetTaskbyId(int id)
+        public async Task<ActionResult<TaskItem>> GetTaskById(int id)
         {
-            var res = _context.Tasks.Find(id);    
+            var res = new TaskItem();
+            try
+            {
+                res = await repository.GetTaskByIdAsync(id);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
 
             return Ok(res);
         }
-        [HttpPost]
-        public ActionResult CreateTask(Task task)
+        [HttpPost(Name = "CreateTask")]
+        public async Task<ActionResult<TaskItem>> CreateTask([FromBody] WriteTaskDto taskDto)
         {
-            _context.Tasks.Add(task);
-            _context.SaveChanges();
-            return CreatedAtRoute("GetTaskById", new {id = task.Id}, task);
+            var task = mapper.Map<TaskItem>(taskDto);
+            var createdTask = await repository.CreateTaskAsync(task);
+            
+            return CreatedAtRoute("GetTaskById", new {id = createdTask.Id}, createdTask);
         }
         [HttpPut("{id}", Name = "UpdateTask")]
-        public ActionResult UpdateTask([FromRoute]int id, [FromBody] Task newTask)
+        public async Task<IActionResult> UpdateTask([FromRoute]int id, [FromBody] WriteTaskDto taskDto)
         {
-            var oldTask = _context.Tasks.Find(id);
-            if(oldTask is null) 
-                return NotFound("No Task with the given id");
-            oldTask.Id = newTask.Id;
-            oldTask.Title = newTask.Title;
-            oldTask.Status = newTask.Status;
-            _context.SaveChanges();
+            var newTask = mapper.Map<TaskItem>(taskDto);
+            try
+            {
+                await repository.UpdateTaskAsync(newTask, id);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
             return NoContent();
         }
         [HttpDelete("{id}", Name = "DeleteTask")]
-        public ActionResult DeleteTask(int id)
+        public async Task<IActionResult> DeleteTask(int id)
         {
-            var res = _context.Tasks.Find(id);
-            if(res is null)
-                return NotFound("No task with the given id");
-            _context.Tasks.Remove(res);
-            _context.SaveChanges();
+            try
+            {
+                await repository.DeleteTaskAsync(id);
+            }
+            catch(Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
             return NoContent();
-
         }
     }
 }

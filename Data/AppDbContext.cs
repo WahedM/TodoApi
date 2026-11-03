@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using TodoApi.Models;
 
 public class AppDbContext: DbContext
 {
@@ -7,5 +8,5 @@ public class AppDbContext: DbContext
     {
         
     }
-    public DbSet<Task> Tasks => Set<Task>();
+    public DbSet<TaskItem> Tasks => Set<TaskItem>();
 }
