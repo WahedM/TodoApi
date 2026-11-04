@@ -1,0 +1,121 @@
+[
+  {
+    "ContainingType": "TodoApi.Controllers.TaskController",
+    "Method": "GetallTasks",
+    "RelativePath": "api/Task",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[TodoApi.Models.TaskItem, TodoApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "GetAllTasks"
+  },
+  {
+    "ContainingType": "TodoApi.Controllers.TaskController",
+    "Method": "CreateTask",
+    "RelativePath": "api/Task",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "taskDto",
+        "Type": "TodoApi.DTOs.WriteTaskDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "TodoApi.Models.TaskItem",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "CreateTask"
+  },
+  {
+    "ContainingType": "TodoApi.Controllers.TaskController",
+    "Method": "GetTaskById",
+    "RelativePath": "api/Task/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "TodoApi.Models.TaskItem",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "GetTaskById"
+  },
+  {
+    "ContainingType": "TodoApi.Controllers.TaskController",
+    "Method": "UpdateTask",
+    "RelativePath": "api/Task/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "taskDto",
+        "Type": "TodoApi.DTOs.WriteTaskDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [],
+    "EndpointName": "UpdateTask"
+  },
+  {
+    "ContainingType": "TodoApi.Controllers.TaskController",
+    "Method": "DeleteTask",
+    "RelativePath": "api/Task/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [],
+    "EndpointName": "DeleteTask"
+  }
+]

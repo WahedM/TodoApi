@@ -9,11 +9,10 @@ using TodoApi.Repository;
 namespace TodoApi.Controllers
 {
         
-    [Route("api/[Controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class TaskController : ControllerBase
     {
-
         private readonly ITaskRepository repository;
         private readonly IMapper mapper;
 
@@ -31,54 +30,32 @@ namespace TodoApi.Controllers
             return Ok(res);
         }
         [HttpGet("{id}", Name = "GetTaskById")]
-        public async Task<ActionResult<TaskItem>> GetTaskById(int id)
+        public async Task<ActionResult<TaskItem>> GetTaskById(Guid id)
         {
-            var res = new TaskItem();
-            try
-            {
-                res = await repository.GetTaskByIdAsync(id);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
-
-            return Ok(res);
+            var res = await repository.GetTaskByIdAsync(id);
+           
+            return res is null ? NotFound() : Ok(res);
         }
         [HttpPost(Name = "CreateTask")]
-        public async Task<ActionResult<TaskItem>> CreateTask([FromBody] WriteTaskDto taskDto)
+        public async Task<ActionResult<TaskItem>> CreateTask([FromRoute] Guid id, [FromBody] WriteTaskDto taskDto)
         {
-            var task = mapper.Map<TaskItem>(taskDto);
-            var createdTask = await repository.CreateTaskAsync(task);
+            var createdTask = await repository.CreateTaskAsync(taskDto);
             
             return CreatedAtRoute("GetTaskById", new {id = createdTask.Id}, createdTask);
         }
         [HttpPut("{id}", Name = "UpdateTask")]
-        public async Task<IActionResult> UpdateTask([FromRoute]int id, [FromBody] WriteTaskDto taskDto)
+        public async Task<IActionResult> UpdateTask([FromRoute]Guid id, [FromBody] WriteTaskDto taskDto)
         {
-            var newTask = mapper.Map<TaskItem>(taskDto);
-            try
-            {
-                await repository.UpdateTaskAsync(newTask, id);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
-            return NoContent();
+            var res = await repository.UpdateTaskAsync(taskDto, id);
+            
+            return res is null ? NotFound() : NoContent();
         }
         [HttpDelete("{id}", Name = "DeleteTask")]
-        public async Task<IActionResult> DeleteTask(int id)
+        public async Task<IActionResult> DeleteTask([FromRoute]Guid id)
         {
-            try
-            {
-                await repository.DeleteTaskAsync(id);
-            }
-            catch(Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
-            return NoContent();
+            var res = await repository.DeleteTaskAsync(id);
+
+            return res is null ? NotFound() : NoContent();
         }
     }
 }

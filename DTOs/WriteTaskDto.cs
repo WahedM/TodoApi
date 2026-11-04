@@ -6,12 +6,14 @@ namespace TodoApi.DTOs
 {
     public class WriteTaskDto
     {
-        [Required(ErrorMessage = "The title is required.")]
+        [Required, MaxLength(200)]
         public string Title { get; set; } = string.Empty;
+        [MaxLength(200)]
         public string? Description { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? Deadline { get; set; }
+        [EnumDataType(typeof(TaskItemStatus))]
         public TaskItemStatus Status { get; set; } = TaskItemStatus.Todo;
+        [EnumDataType(typeof(TaskItemPriority))]
         public TaskItemPriority Priority { get; set; } = TaskItemPriority.medium;
     }
 }

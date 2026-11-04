@@ -1,5 +1,6 @@
 ﻿using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+using TodoApi.DTOs;
 using TodoApi.Models;
 
 namespace TodoApi.Repository
@@ -15,46 +16,47 @@ namespace TodoApi.Repository
             this.mapper = mapper;
         }
 
-        public async Task<TaskItem> CreateTaskAsync(TaskItem task)
+        public async Task<TaskItem> CreateTaskAsync(WriteTaskDto taskDto)
         {
-            
+            var task = mapper.Map<TaskItem>(taskDto);
             context.Tasks.Add(task);
             await context.SaveChangesAsync();
             return task;
         }
 
-        public async Task DeleteTaskAsync(int id)
+        public async Task<TaskItem?> DeleteTaskAsync(Guid id)
         {
             var res = await context.Tasks.FindAsync(id);
             if (res is null)
-                throw new Exception("No such a Task with the given ID");
+                return null;
             context.Tasks.Remove(res);
-            await context.SaveChangesAsync();   
+            await context.SaveChangesAsync();
+            return res;    
         }
 
         public async Task<List<TaskItem>> GetAllTasksAsync()
         {
             var res = await context.Tasks.ToListAsync();
-
+            
             return res;
         }
 
-        public async Task<TaskItem> GetTaskByIdAsync(int id)
+        public async Task<TaskItem?> GetTaskByIdAsync(Guid id)
         {
             var res = await context.Tasks.FindAsync(id);
             if (res is null)
-                throw new Exception("No such a Task with the given ID");
-
+                return null;
             return res;
         }
 
-        public async Task UpdateTaskAsync(TaskItem task, int id)
+        public async Task<TaskItem?> UpdateTaskAsync(WriteTaskDto taskDto, Guid id)
         {
             var res = await context.Tasks.FindAsync(id);
             if (res is null)
-                throw new Exception("No such a Task with the given ID");
-            res = task;
+                return null;
+            mapper.Map(taskDto, res);
             await context.SaveChangesAsync();
+            return res;
         }
     }
 }
