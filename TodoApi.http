@@ -1,40 +1,22 @@
-@TodoApi_HostAddress = http://localhost:5107
+@host = http://localhost:5107
 
-GET {{TodoApi_HostAddress}}/GetTasks
-Accept: application/json
-
-###
-GET {{TodoApi_HostAddress}}/GetTaskById/3
-Accept: application/json
-
-###
-GET {{TodoApi_HostAddress}}/
-Accept: application/json
-###
-POST {{TodoApi_HostAddress}}/api/Task
-Accept: application/json
+### Create
+POST {{host}}/api/task
 Content-Type: application/json
 
-{
-    "id" : 1,
-    "title" : "First",
-    "Status" : 1
-}
-###
-Put {{TodoApi_HostAddress}}/UpdateTask/3
-Accept: application/json
+{ "title": "First", "status": "todo", "priority": "high" }
+
+### Get all
+GET {{host}}/api/task
+
+### Get one (use the id from the create response)
+GET {{host}}/api/task/PASTE-GUID-HERE
+
+### Update
+PUT {{host}}/api/task/PASTE-GUID-HERE
 Content-Type: application/json
 
-{
-    "id" : 3,
-    "title" : "Fourth",
-    "Status" : 3
-}
+{ "title": "Updated", "status": "inProgress", "priority": "low" }
 
-###
-DELETE {{TodoApi_HostAddress}}/DeleteTask/1
-Accept: application/json
-
-###
-GET {{TodoApi_HostAddress}}/api/Task
-Accept: application/json
+### Delete
+DELETE {{host}}/api/task/PASTE-GUID-HERE

@@ -36,17 +36,14 @@ namespace TodoApi.Repository
 
         public async Task<List<TaskItem>> GetAllTasksAsync()
         {
-            var res = await context.Tasks.ToListAsync();
+            var res = await context.Tasks.AsNoTracking().ToListAsync();
             
             return res;
         }
 
         public async Task<TaskItem?> GetTaskByIdAsync(Guid id)
         {
-            var res = await context.Tasks.FindAsync(id);
-            if (res is null)
-                return null;
-            return res;
+            return await context.Tasks.FindAsync(id);
         }
 
         public async Task<TaskItem?> UpdateTaskAsync(WriteTaskDto taskDto, Guid id)
