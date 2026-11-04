@@ -15,6 +15,16 @@ namespace TodoApi.Repository
             this.context = context;
             this.mapper = mapper;
         }
+        public async Task<List<TaskItem>> GetAllTasksAsync()
+        {
+            var res = await context.Tasks.AsNoTracking().ToListAsync();
+            
+            return res;
+        }
+        public async Task<TaskItem?> GetTaskByIdAsync(Guid id)
+        {
+            return await context.Tasks.FindAsync(id);
+        }
 
         public async Task<TaskItem> CreateTaskAsync(WriteTaskDto taskDto)
         {
@@ -23,6 +33,17 @@ namespace TodoApi.Repository
             await context.SaveChangesAsync();
             return task;
         }
+
+        public async Task<TaskItem?> UpdateTaskAsync(Guid id, WriteTaskDto taskDto)
+        {
+            var res = await context.Tasks.FindAsync(id);
+            if (res is null)
+                return null;
+            mapper.Map(taskDto, res);
+            await context.SaveChangesAsync();
+            return res;
+        }
+
 
         public async Task<TaskItem?> DeleteTaskAsync(Guid id)
         {
@@ -34,26 +55,5 @@ namespace TodoApi.Repository
             return res;    
         }
 
-        public async Task<List<TaskItem>> GetAllTasksAsync()
-        {
-            var res = await context.Tasks.AsNoTracking().ToListAsync();
-            
-            return res;
-        }
-
-        public async Task<TaskItem?> GetTaskByIdAsync(Guid id)
-        {
-            return await context.Tasks.FindAsync(id);
-        }
-
-        public async Task<TaskItem?> UpdateTaskAsync(WriteTaskDto taskDto, Guid id)
-        {
-            var res = await context.Tasks.FindAsync(id);
-            if (res is null)
-                return null;
-            mapper.Map(taskDto, res);
-            await context.SaveChangesAsync();
-            return res;
-        }
     }
 }

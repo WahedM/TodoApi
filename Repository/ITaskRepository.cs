@@ -7,7 +7,7 @@ namespace TodoApi.Repository
         Task<List<TaskItem>> GetAllTasksAsync();
         Task<TaskItem?> GetTaskByIdAsync(Guid id);
         Task<TaskItem> CreateTaskAsync(WriteTaskDto taskDto);
-        Task<TaskItem?> UpdateTaskAsync(WriteTaskDto taskDto, Guid id);
+        Task<TaskItem?> UpdateTaskAsync(Guid id, WriteTaskDto taskDto);
         Task<TaskItem?> DeleteTaskAsync(Guid id);
     }
 }

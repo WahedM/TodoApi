@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TodoApi.Models;
 using TodoApi.DTOs;
 using TodoApi.Repository;
+using MapsterMapper;
 namespace TodoApi.Controllers
 {
         
@@ -10,18 +11,20 @@ namespace TodoApi.Controllers
     public class TaskController : ControllerBase
     {
         private readonly ITaskRepository repository;
+        private readonly IMapper mapper;
 
-        public TaskController(ITaskRepository repository)
+        public TaskController(ITaskRepository repository, IMapper mapper)
         {
             this.repository = repository;
+            this.mapper = mapper;
         }
 
         [HttpGet(Name = "GetAllTasks")]
-        public async Task<ActionResult<List<TaskItem>>> GetallTasks()
+        public async Task<ActionResult<List<TaskResponseDto>>> GetallTasks()
         {
             var res = await repository.GetAllTasksAsync();
 
-            return Ok(res);
+            return Ok(mapper.Map<List<TaskResponseDto>>(res));
         }
         [HttpGet("{id:guid}", Name = "GetTaskById")]
         public async Task<ActionResult<TaskItem>> GetTaskById(Guid id)
@@ -40,7 +43,7 @@ namespace TodoApi.Controllers
         [HttpPut("{id:guid}", Name = "UpdateTask")]
         public async Task<IActionResult> UpdateTask([FromRoute]Guid id, [FromBody] WriteTaskDto taskDto)
         {
-            var res = await repository.UpdateTaskAsync(taskDto, id);
+            var res = await repository.UpdateTaskAsync(id, taskDto);
             
             return res is null ? NotFound() : NoContent();
         }
