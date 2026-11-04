@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using TodoApi.Models;
 using TodoApi.DTOs;
 using TodoApi.Repository;
 using MapsterMapper;
@@ -27,18 +26,18 @@ namespace TodoApi.Controllers
             return Ok(mapper.Map<List<TaskResponseDto>>(res));
         }
         [HttpGet("{id:guid}", Name = "GetTaskById")]
-        public async Task<ActionResult<TaskItem>> GetTaskById(Guid id)
+        public async Task<ActionResult<TaskResponseDto>> GetTaskById(Guid id)
         {
             var res = await repository.GetTaskByIdAsync(id);
            
-            return res is null ? NotFound() : Ok(res);
+            return res is null ? NotFound() : Ok(mapper.Map<TaskResponseDto>(res));
         }
         [HttpPost(Name = "CreateTask")]
-        public async Task<ActionResult<TaskItem>> CreateTask([FromBody] WriteTaskDto taskDto)
+        public async Task<ActionResult<TaskResponseDto>> CreateTask([FromBody] WriteTaskDto taskDto)
         {
             var createdTask = await repository.CreateTaskAsync(taskDto);
             
-            return CreatedAtRoute("GetTaskById", new {id = createdTask.Id}, createdTask);
+            return CreatedAtRoute("GetTaskById", new {id = createdTask.Id}, mapper.Map<TaskResponseDto>(createdTask));
         }
         [HttpPut("{id:guid}", Name = "UpdateTask")]
         public async Task<IActionResult> UpdateTask([FromRoute]Guid id, [FromBody] WriteTaskDto taskDto)
