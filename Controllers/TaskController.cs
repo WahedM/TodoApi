@@ -22,7 +22,7 @@ namespace TodoApi.Controllers
         public async Task<ActionResult<List<TaskResponseDto>>> GetallTasks()
         {
             var res = await repository.GetAllTasksAsync();
-
+            // throw new Exception("Test exception");
             return Ok(mapper.Map<List<TaskResponseDto>>(res));
         }
         [HttpGet("{id:guid}", Name = "GetTaskById")]
