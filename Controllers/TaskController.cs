@@ -19,11 +19,17 @@ namespace TodoApi.Controllers
         }
 
         [HttpGet(Name = "GetAllTasks")]
-        public async Task<ActionResult<List<TaskResponseDto>>> GetallTasks()
+        public async Task<ActionResult<PagedResult<TaskResponseDto>>> GetallTasks([FromQuery] TaskQueryParameters query)
         {
-            var res = await repository.GetAllTasksAsync();
-            // throw new Exception("Test exception");
-            return Ok(mapper.Map<List<TaskResponseDto>>(res));
+            var result = await repository.GetAllTasksAsync(query);
+
+            return Ok(new PagedResult<TaskResponseDto>
+            {
+                Items = mapper.Map<List<TaskResponseDto>>(result.Items),
+                Page = result.Page,
+                PageSize = result.PageSize,
+                TotalCount = result.TotalCount
+            });
         }
         [HttpGet("{id:guid}", Name = "GetTaskById")]
         public async Task<ActionResult<TaskResponseDto>> GetTaskById(Guid id)

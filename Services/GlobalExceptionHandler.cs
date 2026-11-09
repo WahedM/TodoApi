@@ -1,22 +1,24 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TodoApi.Services
 {
     public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
     {
-        public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken ct  )
+        public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken ct)
         {
-            logger.LogError(exception, "An unhandled exception occurred.");
+            logger.LogError(exception, "Unhandled exception on {Method} {Path}",
+                context.Request.Method, context.Request.Path);
+
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            context.Response.ContentType = "application/json";
-            var errorResponse = new
+            await context.Response.WriteAsJsonAsync(new ProblemDetails
             {
-                Message = "An unexpected error occurred. Please try again later.",
-                Details = exception.Message
-            };
-            await context.Response.WriteAsJsonAsync(errorResponse, ct);
+                Status = StatusCodes.Status500InternalServerError,
+                Title = "An unexpected error occurred.",
+                Detail = "Please try again later."
+            }, options: null, contentType: "application/problem+json", cancellationToken: ct);
+
             return true;
         }
-
     }
 }

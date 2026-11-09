@@ -4,7 +4,7 @@ namespace TodoApi.Repository
 {
     public interface ITaskRepository
     {
-        Task<List<TaskItem>> GetAllTasksAsync();
+        Task<PagedResult<TaskItem>> GetAllTasksAsync(TaskQueryParameters q);
         Task<TaskItem?> GetTaskByIdAsync(Guid id);
         Task<TaskItem> CreateTaskAsync(WriteTaskDto taskDto);
         Task<TaskItem?> UpdateTaskAsync(Guid id, WriteTaskDto taskDto);

@@ -15,11 +15,45 @@ namespace TodoApi.Repository
             this.context = context;
             this.mapper = mapper;
         }
-        public async Task<List<TaskItem>> GetAllTasksAsync()
+        public async Task<PagedResult<TaskItem>> GetAllTasksAsync(TaskQueryParameters q)
         {
-            var res = await context.Tasks.AsNoTracking().ToListAsync();
-            
-            return res;
+            var query = context.Tasks.AsNoTracking();
+
+            // search + filters
+            if (!string.IsNullOrWhiteSpace(q.Search))
+            {
+                var term = q.Search.Trim();
+                query = query.Where(t => t.Title.Contains(term) || t.Description.Contains(term));
+            }
+            if (q.Status is not null) query = query.Where(t => t.Status == q.Status);
+            if (q.Priority is not null) query = query.Where(t => t.Priority == q.Priority);
+
+            // count AFTER filtering, BEFORE paging
+            var totalCount = await query.CountAsync();
+
+            // sorting
+            IOrderedQueryable<TaskItem> ordered = q.SortBy switch
+            {
+                TaskSortBy.Title => q.Descending ? query.OrderByDescending(t => t.Title) : query.OrderBy(t => t.Title),
+                TaskSortBy.Deadline => q.Descending ? query.OrderByDescending(t => t.Deadline) : query.OrderBy(t => t.Deadline),
+                TaskSortBy.Priority => q.Descending ? query.OrderByDescending(t => t.Priority) : query.OrderBy(t => t.Priority),
+                _ => q.Descending ? query.OrderByDescending(t => t.CreatedAt) : query.OrderBy(t => t.CreatedAt)
+            };
+            ordered = ordered.ThenBy(t => t.Id);   // tie-breaker
+
+            // paging
+            var items = await ordered
+                .Skip((q.Page - 1) * q.PageSize)
+                .Take(q.PageSize)
+                .ToListAsync();
+
+            return new PagedResult<TaskItem>
+            {
+                Items = items,
+                Page = q.Page,
+                PageSize = q.PageSize,
+                TotalCount = totalCount
+            };
         }
         public async Task<TaskItem?> GetTaskByIdAsync(Guid id)
         {
