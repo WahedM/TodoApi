@@ -13,7 +13,7 @@ namespace TodoApi.DTOs
         public TaskItemPriority? Priority { get; set; }
         public TaskSortBy SortBy { get; set; } = TaskSortBy.CreatedAt;
         public bool Descending { get; set; } = true;
-        [Range(1, int.MaxValue)]
+        [Range(1, 100_000)]
         public int Page { get; set; } = 1;
         [Range(1, 100)]
         public int PageSize { get; set; } = 10;

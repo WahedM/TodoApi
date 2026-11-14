@@ -35,7 +35,8 @@ namespace TodoApi.Repository
             IOrderedQueryable<TaskItem> ordered = q.SortBy switch
             {
                 TaskSortBy.Title => q.Descending ? query.OrderByDescending(t => t.Title) : query.OrderBy(t => t.Title),
-                TaskSortBy.Deadline => q.Descending ? query.OrderByDescending(t => t.Deadline) : query.OrderBy(t => t.Deadline),
+                TaskSortBy.Deadline => q.Descending ? query.OrderBy(t => t.Deadline == null).ThenByDescending(t => t.Deadline)
+                : query.OrderBy(t => t.Deadline == null).ThenBy(t => t.Deadline),
                 TaskSortBy.Priority => q.Descending ? query.OrderByDescending(t => t.Priority) : query.OrderBy(t => t.Priority),
                 _ => q.Descending ? query.OrderByDescending(t => t.CreatedAt) : query.OrderBy(t => t.CreatedAt)
             };
